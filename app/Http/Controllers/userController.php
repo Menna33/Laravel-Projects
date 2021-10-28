@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\student;
 // use App\Http\Controllers\validator;
 
 class userController extends Controller
@@ -16,9 +16,53 @@ class userController extends Controller
 
    }
 
+   public function display(){
+    $data =  student::get();
+    return view('display',['data' => $data]);
+ }
+ public function store(Request $request){
+
+  $data =   $this->validate($request,[     
+       "name"     => "required",
+       "email"    => "required|email",
+       "password" => "required|min:6"
+    ]);
 
 
-  public function store(Request $request){
+     // student::create(['name' => $request->name , 'password' => $request->password , 'email' => $request->email]);
+
+     // student::create($request->excep(['_token']));
+      
+
+     $data['password'] = bcrypt($data['password']);
+
+
+     $op = student::create($data);
+
+     if($op){
+       $message = "Raw Inserted";
+     }else{
+       $message = "Error Try Again !!!";
+     }
+
+      session()->flash('Message',$message);
+
+    return redirect(url('/Create'));
+
+} 
+
+
+
+
+public function edit($id){
+
+$data = student::where('id',$id)->get();
+
+return view('edit',['data' => $data]);
+
+}
+
+ /* public function store(Request $request){
 
         //  echo $request->email;
         //  echo $request->input('name');
@@ -58,21 +102,19 @@ class userController extends Controller
 
 
 
-         $this->validate($request,[
+        /* $this->validate($request,[
            
             "name"     => "required",
             "email"    => "required|email",
             "password" => "required|min:6",
             "address"  =>"required|min:10",
             "gender"   =>"required",
-            "linkedinurl" => "required|url"
-            
-
+            "linkedinurl" => "required|url
          ]);
 
 
            dd('valid Data');
 
-    } 
+    } */
 
 }

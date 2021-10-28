@@ -21,6 +21,28 @@ Route::get('/', function () {
 Route::post('save',function () {
     echo 'Form Data';
 });*/
-# Controller   
+# userController   
 Route::get('Create','userController@create');
 Route::post('save','userController@store');
+
+
+#Blog
+Route::get('Create','blogController@create');
+Route::post('save','blogController@store');
+Route::get('display','blogController@store');
+//Route::get('remove/{$id}','blogController@remove');
+
+
+Route::resource('Admins','adminsController');
+Route::resource('Articals','articalsController');
+
+#routing for user
+Route::get('users/Login','usersController@LoginView');
+Route::post('users/doLogin','usersController@login');
+
+Route::get('users/LogOut','adminsController@LogOut')->middleware('userCheck');
+Route::resource('users','usersController');
+
+
+#routing for tasks
+Route::resource('tasks','tasksController');
